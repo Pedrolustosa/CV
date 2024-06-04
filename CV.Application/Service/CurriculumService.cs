@@ -1,10 +1,13 @@
 ﻿using iText.Layout;
-using iText.Kernel.Pdf;
 using CV.Domain.Entity;
+using iText.Kernel.Pdf;
 using iText.Kernel.Font;
+using iText.Kernel.Geom;
+using iText.Kernel.Colors;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using iText.IO.Font.Constants;
+using iText.Kernel.Pdf.Action;
 using CV.Application.Interface;
 
 namespace CV.Application.Service;
@@ -16,16 +19,18 @@ public class CurriculumService : ICurriculumService
         using var memoryStream = new MemoryStream();
         PdfWriter writer = new(memoryStream);
         PdfDocument pdf = new(writer);
-        Document document = new(pdf);
+        PageSize pageSize = PageSize.A4;
+        Document document = new(pdf, pageSize);
 
+        document.SetMargins(36, 36, 36, 36);
         PdfFont bold = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
         PdfFont normal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
 
         var titleStyle = new Style()
-            .SetFontSize(20)
+            .SetFontSize(24)
             .SetBold()
             .SetFont(bold)
-            .SetTextAlignment(TextAlignment.LEFT);
+            .SetTextAlignment(TextAlignment.CENTER);
 
         var sectionTitleStyle = new Style()
             .SetFontSize(14)
@@ -37,47 +42,68 @@ public class CurriculumService : ICurriculumService
             .SetFont(normal);
 
         var bulletStyle = new Style()
-            .SetFontSize(12)
+            .SetFontSize(10)
             .SetFont(normal);
 
         var subBulletStyle = new Style()
-            .SetFontSize(12)
+            .SetFontSize(10)
             .SetFont(normal)
             .SetMarginLeft(15);
 
         document.Add(new Paragraph(curriculum.Name).AddStyle(titleStyle));
-        document.Add(new Paragraph($"Contato: {curriculum.Contact}").AddStyle(textStyle));
-        document.Add(new Paragraph($"Endereço: {curriculum.Address}").AddStyle(textStyle));
-        document.Add(new Paragraph($"Telefone: {curriculum.Telephone}").AddStyle(textStyle));
-        document.Add(new Paragraph($"Email: {curriculum.Email}").AddStyle(textStyle));
-        document.Add(new Paragraph($"GitHub: {curriculum.GitHub}").AddStyle(textStyle));
-        document.Add(new Paragraph($"LinkedIn: {curriculum.LinkedIn}").AddStyle(textStyle));
+        document.Add(new Paragraph($"      Contato: {curriculum.Contact}").AddStyle(textStyle));
+        document.Add(new Paragraph($"      Endereço: {curriculum.Address}").AddStyle(textStyle));
+        document.Add(new Paragraph($"      Telefone: {curriculum.Telephone}").AddStyle(textStyle));
+        document.Add(new Paragraph($"      Email: {curriculum.Email}").AddStyle(textStyle));
 
-        document.Add(new Paragraph("Educação:").AddStyle(sectionTitleStyle));
+        Paragraph links = new Paragraph()
+                .Add(new Link("GitHub", PdfAction.CreateURI(curriculum.GitHub)).SetUnderline().SetFontColor(ColorConstants.BLUE).AddStyle(textStyle))
+                .Add(new Text(" | ").AddStyle(textStyle))
+                .Add(new Link("LinkedIn", PdfAction.CreateURI(curriculum.LinkedIn)).SetUnderline().SetFontColor(ColorConstants.BLUE).AddStyle(textStyle));
+        document.Add(links);
+
+        Div educationSection = new Div().SetKeepTogether(true);
+        educationSection.Add(new Paragraph("Educação:").AddStyle(sectionTitleStyle));
+
         foreach (var education in curriculum.Education)
         {
-            document.Add(new Paragraph($"• {education.Institution}, {education.City}, {education.State}").AddStyle(bulletStyle).SetFont(bold));
-            document.Add(new Paragraph($"  o {education.Course}").AddStyle(subBulletStyle));
-            document.Add(new Paragraph($"      [{education.Status}, {education.Period}]").AddStyle(subBulletStyle));
+            educationSection.Add(new Paragraph($"• {education.Institution}, {education.City}, {education.State}")
+                              .AddStyle(bulletStyle)
+                              .SetFont(bold));
+            educationSection.Add(new Paragraph($"  o {education.Course}")
+                              .AddStyle(subBulletStyle));
+            educationSection.Add(new Paragraph($"        [{education.Status}, {education.Period}]")
+                              .AddStyle(subBulletStyle));
         }
+        document.Add(educationSection);
 
-        document.Add(new Paragraph("Experiência Profissional:").AddStyle(sectionTitleStyle));
+        Div experienceSection = new Div().SetKeepTogether(true);
+        experienceSection.Add(new Paragraph("Experiência Profissional:").AddStyle(sectionTitleStyle));
         foreach (var experience in curriculum.Experience)
         {
-            document.Add(new Paragraph($"• {experience.Company}, {experience.City}").AddStyle(bulletStyle).SetFont(bold));
-            document.Add(new Paragraph($"  o {experience.Position}").AddStyle(subBulletStyle));
-            document.Add(new Paragraph($"    [{experience.Period}]").AddStyle(subBulletStyle));
+            experienceSection.Add(new Paragraph($"• {experience.Company}, {experience.City}")
+                             .AddStyle(bulletStyle)
+                             .SetFont(bold));
+            experienceSection.Add(new Paragraph($"  o {experience.Position}")
+                             .AddStyle(subBulletStyle));
+            experienceSection.Add(new Paragraph($"    [{experience.Period}]")
+                             .AddStyle(subBulletStyle));
+
             foreach (var descricao in experience.Description)
             {
-                document.Add(new Paragraph($"• {descricao}").AddStyle(subBulletStyle));
+                experienceSection.Add(new Paragraph($"• {descricao}").AddStyle(subBulletStyle));
             }
         }
+        document.Add(experienceSection);
 
-        document.Add(new Paragraph("Certificações:").AddStyle(sectionTitleStyle));
+        Div certificationSection = new Div().SetKeepTogether(true);
+        certificationSection.Add(new Paragraph("Certificações:").AddStyle(sectionTitleStyle));
+
         foreach (var certification in curriculum.Certification)
         {
-            document.Add(new Paragraph($"• {certification.Name} - {certification.Institution}").AddStyle(bulletStyle));
+            certificationSection.Add(new Paragraph($"• {certification.Name} - {certification.Institution}").AddStyle(bulletStyle));
         }
+        document.Add(certificationSection);
 
         document.Close();
         return memoryStream.ToArray();
