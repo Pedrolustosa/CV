@@ -13,7 +13,6 @@
   <ItemGroup>
     <ProjectReference Include="..\CV.Application\CV.Application.csproj" />
     <ProjectReference Include="..\CV.Domain\CV.Domain.csproj" />
-    <ProjectReference Include="..\CV.Infra\CV.Infra.csproj" />
   </ItemGroup>
 
 </Project>

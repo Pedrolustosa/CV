@@ -1,8 +1,7 @@
-﻿namespace CV.Domain.Entity
+﻿namespace CV.Domain.Entity;
+
+public class Certification
 {
-    public class Certification
-    {
-        public string Name { get; set; }
-        public string Institution { get; set; }
-    }
+    public string Name { get; set; }
+    public string Institution { get; set; }
 }

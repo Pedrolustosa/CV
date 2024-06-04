@@ -4,5 +4,5 @@ namespace CV.Application.Interface;
 
 public interface ICurriculumService
 {
-    byte[] GerarCurriculoPdf(Curriculum curriculo);
+    Task<byte[]> GeneratePdf(Curriculum curriculo);
 }

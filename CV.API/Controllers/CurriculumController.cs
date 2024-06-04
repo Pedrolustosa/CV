@@ -1,20 +1,29 @@
+using MediatR;
 using CV.Domain.Entity;
-using CV.Application.Interface;
 using Microsoft.AspNetCore.Mvc;
+using CV.Application.CQRS.Commands;
 
 namespace CV.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CurriculumController(ICurriculumService curriculumService) : ControllerBase
+public class CurriculumController(IMediator mediator) : ControllerBase
 {
-    private readonly ICurriculumService _curriculumService = curriculumService;
+    private readonly IMediator _mediator = mediator;
 
     [HttpPost]
     [Route("GenerateCurriculum")]
-    public IActionResult GerarCurriculum([FromBody] Curriculum curriculum)
+    public async Task<IActionResult> GerarCurriculum([FromBody] Curriculum curriculum)
     {
-        var pdfBytes = _curriculumService.GerarCurriculoPdf(curriculum);
-        return File(pdfBytes, "application/pdf", $"{curriculum.Name}.pdf");
+        try
+        {
+            var command = new CreateCurriculumCommand { Curriculum = curriculum };
+            var pdfBytes = await _mediator.Send(command);
+            return File(pdfBytes, "application/pdf", $"{curriculum.Name}.pdf");
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 }

@@ -9,12 +9,12 @@
   <ItemGroup>
     <PackageReference Include="itext7" Version="8.0.4" />
     <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.4" />
-    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
+    <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CV.Domain\CV.Domain.csproj" />
-    <ProjectReference Include="..\CV.Infra\CV.Infra.csproj" />
   </ItemGroup>
 
 </Project>
