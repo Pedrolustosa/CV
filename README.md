@@ -51,34 +51,58 @@ The project implements the CQRS standard to separate the concerns of read and wr
   "contact": {
     "address": "123 Main St",
     "telephone": "555-1234",
-    "email": "john.doe@example.com"
+    "email": "john.doe@example.com",
+    "gitHub": "https://github.com/johndoe",
+    "linkedIn": "https://linkedin.com/in/johndoe"
   },
   "education": [
     {
       "institution": "University of Example",
-      "course": "Computer Science",
       "city": "Exampleville",
       "state": "CA",
+      "course": "Computer Science",
       "status": "Graduated",
       "period": "2010 - 2014"
+    },
+    {
+      "institution": "Business School",
+      "city": "Business City",
+      "state": "CA",
+      "course": "Business Administration",
+      "status": "Graduated",
+      "period": "2005 - 2009"
     }
   ],
   "experience": [
     {
       "company": "Tech Solutions Inc.",
-      "position": "Software Developer",
       "city": "Tech Town",
+      "position": "Software Developer",
       "period": "2015 - Present",
       "description": [
         "Developed new features for web applications.",
         "Performed code reviews and provided feedback to team members."
       ]
+    },
+    {
+      "company": "Finance Systems Ltd.",
+      "city": "Finance City",
+      "position": "Senior Developer",
+      "period": "2010 - 2015",
+      "description": [
+        "Led a team of developers in the implementation of a new financial system.",
+        "Optimized database queries for improved performance."
+      ]
     }
   ],
-  "certifications": [
+  "certification": [
     {
       "name": "Certified Web Developer",
       "institution": "Web Development Institute"
+    },
+    {
+      "name": "Project Management Professional (PMP)",
+      "institution": "Project Management Institute"
     }
   ]
 }
