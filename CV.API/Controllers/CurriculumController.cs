@@ -13,17 +13,17 @@ public class CurriculumController(IMediator mediator) : ControllerBase
 
     [HttpPost]
     [Route("GenerateCurriculum")]
-    public async Task<IActionResult> GerarCurriculum([FromBody] Curriculum curriculum)
+    public async Task<IActionResult> GenerateCurriculum([FromBody] Curriculum curriculum)
     {
         try
         {
             var command = new CreateCurriculumCommand { Curriculum = curriculum };
             var pdfBytes = await _mediator.Send(command);
-            return File(pdfBytes, "application/pdf", $"{curriculum.Name}.pdf");
+            return File(pdfBytes, "application/pdf", $"{curriculum.Contact.FullName}.pdf");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            throw;
+            return StatusCode(500, $"Erro ao gerar o currículo: {ex.Message}");
         }
     }
 }

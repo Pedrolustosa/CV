@@ -19,6 +19,5 @@ public class CreateCurriculumCommandHandler(ICurriculumService curriculumService
 		{
 			throw;
 		}
-        
     }
 }

@@ -2,9 +2,8 @@
 
 public class Curriculum
 {
-    public string Name { get; set; }
-    public ContactInfo Contact { get; set; }
-    public ICollection<Education> Education { get; set; }
-    public ICollection<Experience> Experience { get; set; }
-    public ICollection<Certification> Certification { get; set; }
+    public Contact Contact { get; set; }
+    public List<Education> Educations { get; set; }
+    public List<WorkExperience> WorkExperiences { get; set; }
+    public List<Certification> Certifications { get; set; }
 }
