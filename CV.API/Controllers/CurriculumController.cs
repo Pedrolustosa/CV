@@ -6,9 +6,10 @@ namespace CV.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CurriculumController(ICurriculumService curriculumService) : ControllerBase
+public class CurriculumController(ICurriculumService curriculumService, ILogger<CurriculumController> logger) : ControllerBase
 {
-    private readonly ICurriculumService _curriculumService = curriculumService;
+    private readonly ILogger<CurriculumController> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    private readonly ICurriculumService _curriculumService = curriculumService ?? throw new ArgumentNullException(nameof(curriculumService));
 
     [HttpPost]
     [Route("GenerateCurriculum")]
@@ -17,11 +18,13 @@ public class CurriculumController(ICurriculumService curriculumService) : Contro
         try
         {
             var pdfBytes = await _curriculumService.GeneratePdf(curriculum);
+            _logger.LogInformation("GenerateCurriculum action succeeded");
             return File(pdfBytes, "application/pdf", $"{curriculum.Contact.FullName}.pdf");
         }
         catch (Exception ex)
         {
-            return StatusCode(500, $"Erro ao gerar o currículo: {ex.Message}");
+            _logger.LogError(ex, "Error occurred while getting curriculum");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
         }
     }
 }
