@@ -10,8 +10,11 @@ This is a project for generating resumes in PDF format.
 
 ## Libraries Used
 
-- **iText**: Library for PDF document manipulation.
-- **MediatR**: Library for implementing the Mediator pattern.
+- **QuestPDF**: Library for generating PDF documents. (Version: 2024.6.0)
+- **MediatR**: Library for implementing the Mediator pattern. (Version: 11.1.0)
+- **MediatR.Extensions.Microsoft.DependencyInjection**: Extensions for integrating MediatR with Microsoft.Extensions.DependencyInjection. (Version: 11.1.0)
+- **Swashbuckle.AspNetCore**: Library for generating Swagger/OpenAPI documentation for ASP.NET Core Web APIs. (Version: 6.4.0)
+- **Microsoft.Extensions.Configuration.Abstractions**: Provides interfaces for accessing configuration settings in ASP.NET Core applications. (Version: 8.0.0)
 
 ## Architecture
 
@@ -26,87 +29,111 @@ The project follows the principles of Clean Architecture, dividing the applicati
 
 The project includes the following entities:
 
-- **Curriculum**: Represents a resume, containing information such as name, contact, education, experience, and certifications.
-- **ContactInfo**: Represents the contact information of an individual, including address, telephone, and email.
-- **Education**: Represents the individual's education, including institution, course, state, etc.
-- **Experience**: Represents professional experience, including company, position, period, etc.
-- **Certification**: Represents a certification obtained by the individual, including name and institution.
+- **Certification**: Represents a certification obtained by the individual, including name, year, and issuer.
+- **Contact**: Represents the contact information of an individual, including full name, email, phone, address, GitHub, and LinkedIn.
+- **Education**: Represents the individual's education, including degree, institution, city, state, start date, and end date.
+- **WorkExperience**: Represents professional work experience, including job title, company, city, state, start date, end date, description, and technologies.
+- **Curriculum**: Represents a resume, containing contact information, education, work experience, and certifications.
 
 ## CQRS (Command Query Responsibility Segregation)
 
-The project implements the CQRS standard to separate the concerns of read and write operations. Commands and queries are segregated into separate classes, and corresponding handlers are implemented to perform these actions. 
-<br>
-**NOTE: In this case I'm just using the idea of creation to generate the PDF of your resume**
+The project implements the CQRS standard to separate the concerns of read and write operations. Commands and queries are segregated into separate classes, and corresponding handlers are implemented to perform these actions.
 
 ## How to Use
 
 1. Clone the repository.
 2. Run the project.
 
-## JSON Example for testing
+## Example JSON
 
 ```json
 {
-  "name": "John Doe",
   "contact": {
-    "address": "123 Main St",
-    "telephone": "555-1234",
+    "fullName": "John Doe",
     "email": "john.doe@example.com",
+    "phone": "+1-800-555-1234",
+    "address": "123 Main St, Springfield, USA",
     "gitHub": "https://github.com/johndoe",
-    "linkedIn": "https://linkedin.com/in/johndoe"
+    "linkedIn": "https://www.linkedin.com/in/johndoe"
   },
-  "education": [
+  "educations": [
     {
-      "institution": "University of Example",
-      "city": "Exampleville",
-      "state": "CA",
-      "course": "Computer Science",
-      "status": "Graduated",
-      "period": "2010 - 2014"
+      "degree": "Bachelor of Science in Computer Science",
+      "institution": "Springfield University",
+      "city": "Springfield",
+      "state": "IL",
+      "startDate": 2015,
+      "endDate": 2019
     },
     {
-      "institution": "Business School",
-      "city": "Business City",
+      "degree": "Master of Science in Artificial Intelligence",
+      "institution": "Tech Valley Institute",
+      "city": "Tech Valley",
       "state": "CA",
-      "course": "Business Administration",
-      "status": "Graduated",
-      "period": "2005 - 2009"
+      "startDate": 2019,
+      "endDate": 2021
+    },
+    {
+      "degree": "Ph.D. in Machine Learning",
+      "institution": "Data Science University",
+      "city": "Data City",
+      "state": "NY",
+      "startDate": 2021,
+      "endDate": 2025
     }
   ],
-  "experience": [
+  "workExperiences": [
     {
-      "company": "Tech Solutions Inc.",
-      "city": "Tech Town",
-      "position": "Software Developer",
-      "period": "2015 - Present",
-      "description": [
-        "Developed new features for web applications.",
-        "Performed code reviews and provided feedback to team members."
-      ]
+      "jobTitle": "Software Engineer",
+      "company": "Innovative Tech Solutions",
+      "city": "Springfield",
+      "state": "IL",
+      "startDate": "2019-07-01T00:00:00Z",
+      "endDate": "2024-06-30T00:00:00Z",
+      "description": "Developed and maintained various web applications using modern frameworks and technologies.",
+      "technologies": ["JavaScript", "React", "Node.js", "MongoDB"]
     },
     {
-      "company": "Finance Systems Ltd.",
-      "city": "Finance City",
-      "position": "Senior Developer",
-      "period": "2010 - 2015",
-      "description": [
-        "Led a team of developers in the implementation of a new financial system.",
-        "Optimized database queries for improved performance."
-      ]
+      "jobTitle": "Data Scientist",
+      "company": "AI Labs",
+      "city": "Tech Valley",
+      "state": "CA",
+      "startDate": "2024-07-01T00:00:00Z",
+      "endDate": "2027-06-30T00:00:00Z",
+      "description": "Performed data analysis and machine learning modeling for various projects.",
+      "technologies": ["Python", "TensorFlow", "Scikit-learn", "PyTorch"]
     }
   ],
-  "certification": [
+  "certifications": [
     {
-      "name": "Certified Web Developer",
-      "institution": "Web Development Institute"
+      "name": "Certified Kubernetes Administrator",
+      "year": 2022,
+      "issuer": "The Linux Foundation"
     },
     {
-      "name": "Project Management Professional (PMP)",
-      "institution": "Project Management Institute"
+      "name": "AWS Certified Solutions Architect",
+      "year": 2023,
+      "issuer": "Amazon Web Services"
+    },
+    {
+      "name": "Microsoft Certified: Azure Developer Associate",
+      "year": 2021,
+      "issuer": "Microsoft"
+    },
+    {
+      "name": "Certified Scrum Master",
+      "year": 2020,
+      "issuer": "Scrum Alliance"
+    },
+    {
+      "name": "Google Professional Data Engineer",
+      "year": 2024,
+      "issuer": "Google Cloud"
     }
   ]
 }
 ```
+
 ## Contribution
 
 Contributions are welcome! Feel free to open an issue or submit a pull request.
